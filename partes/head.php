@@ -28,8 +28,8 @@
     <?php } ?>
   </header>
   <ul class="menu bg-dark-green">
-    <li><a href="">HOME</a></li>
-    <li><a href="">CATÁLOGO</a></li>
+    <li><a href="/">HOME</a></li>
+    <li><a href="/login.php">CATÁLOGO</a></li>
     <li><a href="">MIS PEDIDOS</a></li>
     <li><a href="">GESTIONAR</a></li>
   </ul>
