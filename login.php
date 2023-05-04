@@ -1,5 +1,5 @@
 <?php //include("functions.php") ?>
-<?php include("partes/head.php") ?>
+<?php include("/partes/head.php") ?>
 
 <pre>
 <?php //var_dump($_SERVER) ?>
@@ -9,4 +9,4 @@
 var_dump($conexion) ?>
 
 
-<?php include("partes/footer.php") ?>
+<?php include("/partes/footer.php") ?>

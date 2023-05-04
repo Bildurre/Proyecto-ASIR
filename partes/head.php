@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Proyecto</title>
-  <link rel="stylesheet" href="/var/www/html/styles/style.css">
+  <link rel="stylesheet" href="/styles/style.css">
 </head>
 <body>
   <?php session_start() ?>
@@ -28,8 +28,8 @@
     <?php } ?>
   </header>
   <ul class="menu bg-dark-green">
-    <li><a href="/var/www/html/">HOME</a></li>
-    <li><a href="/var/www/html/login.php">CATÁLOGO</a></li>
+    <li><a href="/">HOME</a></li>
+    <li><a href="/login.php">CATÁLOGO</a></li>
     <li><a href="">MIS PEDIDOS</a></li>
     <li><a href="">GESTIONAR</a></li>
   </ul>
