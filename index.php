@@ -5,8 +5,8 @@ $host = "192.168.100.11";
 $user = "root";
 $password = "12345678";
 $data_base = "proyecto";
-
-$conexion = @mysqli_connect($host,$user,$password,$data_base);
+echo "uoooooooooooooooooooooo";
+$conexion = mysqli_connect($host,$user,$password,$data_base);
 
 if ($conexion) {
   $seleccion = mysqli_select_db($conexion,"proyecto");
