@@ -1,8 +1,8 @@
 <?php include("partes/head.php") ?>
 
-<pre>
-<?php var_dump($_SERVER) ?>
-</pre>
+<?php
+  var_dump(conectar("localhost"));
+?>
 
 <?php include("partes/footer.php") ?>
 

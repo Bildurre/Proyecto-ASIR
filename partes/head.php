@@ -9,6 +9,7 @@
 </head>
 <body>
   <?php session_start() ?>
+  <?php include("functions.php") ?>
   <header class="bg-so-dark-green">
     <h1>PROYECTO</h1>
     <?php if (!isset($_SESSION["user"]) && $_SERVER["REQUEST_URI"] != "/login.php") { ?>
