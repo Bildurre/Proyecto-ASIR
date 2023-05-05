@@ -1,7 +1,7 @@
 <?php include("partes/head.php") ?>
 
 <?php
-$host = "localhost";
+$host = "192.168.100.11";
 $user = "root";
 $password = "12345678";
 $data_base = "proyecto";
