@@ -1,28 +1,38 @@
 <?php include("partes/head.php") ?>
 
 <?php
-$host = "192.168.100.11";
-$user = "administrador";
+
+
+$user = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : "invitado";
 $password = "12345678";
 $data_base = "proyecto";
-echo "uoooooooooooooooooooooo";
-$conexion = mysqli_connect($host,$user,$password,$data_base);
 
-if ($conexion) {
-  $seleccion = mysqli_select_db($conexion,"proyecto");
-  $conectado = true;
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+$conexion = mysqli_init();
+$conexion -> options(MYSQLI_OPT_CONNECT_TIMEOUT, 1);
+
+try {
+  $real_conexion = mysqli_real_connect($conexion, "192.168.100.11",$user,$password,$data_base);
+} catch (Exception $e) {
+  try {
+    $real_conexion = mysqli_real_connect($conexion, "192.168.100.12",$user,$password,$data_base);
+  } catch (Exception $e) {
+    try {
+      $real_conexion = mysqli_real_connect($conexion, "localhost",$user,$password,$data_base);
+    } catch (Exception $e) {
+      echo "<p>Ha fallado la conexion con la base de datos</p>";
+      $real_conexion = false;
+    }
+  }
 }
 
-if ($conectado && $seleccion) {
+try {
+  $seleccion = mysqli_select_db($conexion,"proyecto");
   $consulta = "select p.nombre, p.tipo, p.descripcion, p.id_producto
               from productos p;";
   $resultado = mysqli_query ($conexion, $consulta);
-  $conectado = true;
-}
+  mysqli_close($conexion);
 
-mysqli_close($conexion);
-
-if ($conectado) {
   $array_resultados = [];
   $contador = 0;
   while ($fila = mysqli_fetch_row($resultado)) {
@@ -34,35 +44,35 @@ if ($conectado) {
     ];
     $contador++;
   }
-} else {
-  echo "fuuuuu";
-}
 
-$cantidad_productos = sizeof($array_resultados) - 1;
-$n = 0;
-$random_array = [];
+  $cantidad_productos = sizeof($array_resultados) - 1;
+  $n = 0;
+  $random_array = [];
 
-while ($n < 12) {
-  $numero_random = rand(0,$cantidad_productos);
-  if (!in_array($numero_random, $random_array)) {
-    array_push($random_array, $numero_random);
-    $n++;
+  while ($n < 12) {
+    $numero_random = rand(0,$cantidad_productos);
+    if (!in_array($numero_random, $random_array)) {
+      array_push($random_array, $numero_random);
+      $n++;
+    }
   }
-}
 
-echo "<div class='main'>";
-foreach ($random_array as $posicion) {
-  echo "<form method='POST' action='producto.php' class='form-previsual'>";
-  echo "<img src='imagenes/".$array_resultados[$posicion]['tipo'].".jpg'>";
-  echo "<p><strong>" . $array_resultados[$posicion]['nombre'] . "</strong></p>";
-  echo "<p>Tipo: " . ucfirst($array_resultados[$posicion]['tipo']) . "</p>";
-  echo "<hr>";
-  echo "<p class='descripcion'>" . $array_resultados[$posicion]['descripcion'] . "</p>";
-  echo "<input type='hidden' name='id_producto' value='".$array_resultados[$posicion]['id']."'>";
-  echo "</form>";
-}
-echo "</div>";
+  echo "<div class='main'>";
+  foreach ($random_array as $posicion) {
+    echo "<form method='POST' action='producto.php' class='form-previsual'>";
+      echo "<img src='imagenes/".$array_resultados[$posicion]['tipo'].".jpg'>";
+      echo "<p><strong>" . $array_resultados[$posicion]['nombre'] . "</strong></p>";
+      echo "<p>Tipo: " . ucfirst($array_resultados[$posicion]['tipo']) . "</p>";
+      echo "<hr>";
+      echo "<p class='descripcion'>" . $array_resultados[$posicion]['descripcion'] . "</p>";
+      echo "<input type='hidden' name='id_producto' value='".$array_resultados[$posicion]['id']."'>";
+    echo "</form>";
+  }
+  echo "</div>";
 
+} catch (Exception $e) {
+  echo "Uuuups. Algo ha salido mal";
+}
 ?>
 
 <?php include("partes/footer.php") ?>

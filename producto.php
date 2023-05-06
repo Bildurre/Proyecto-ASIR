@@ -1,18 +1,32 @@
 <?php include("partes/head.php") ?>
 <?php
-$host = "localhost";
-$user = "root";
+$user = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : "invitado";
 $password = "12345678";
 $data_base = "proyecto";
 
-$conexion = @mysqli_connect($host,$user,$password,$data_base);
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+$conexion = mysqli_init();
+$conexion -> options(MYSQLI_OPT_CONNECT_TIMEOUT, 1);
 
-if ($conexion) {
-  $seleccion = mysqli_select_db($conexion,"proyecto");
-  $conectado = true;
+try {
+  $real_conexion = mysqli_real_connect($conexion, "192.168.100.11",$user,$password,$data_base);
+} catch (Exception $e) {
+  try {
+    $real_conexion = mysqli_real_connect($conexion, "192.168.100.12",$user,$password,$data_base);
+  } catch (Exception $e) {
+    try {
+      $real_conexion = mysqli_real_connect($conexion, "localhost",$user,$password,$data_base);
+    } catch (Exception $e) {
+      echo "<p>Ha fallado la conexion con la base de datos</p>";
+      $real_conexion = false;
+    }
+  }
 }
 
-if ($conectado && $seleccion) {
+
+try {
+  $seleccion = mysqli_select_db($conexion,"proyecto");
+
   $consulta = "select p.nombre, p.tipo, p.descripcion,
                       f.precio, f.stock, f.volumen
               from productos p join formatos f
@@ -20,12 +34,9 @@ if ($conectado && $seleccion) {
               where p.id_producto = '".$_POST['id_producto']."'
               order by f.volumen asc;";
   $resultado = mysqli_query ($conexion, $consulta);
-  $conectado = true;
-}
 
-mysqli_close($conexion);
+  mysqli_close($conexion);
 
-if ($conectado) {
   $array_resultados = [];
   $contador = 0;
   while ($fila = mysqli_fetch_row($resultado)) {
@@ -39,68 +50,35 @@ if ($conectado) {
     ];
     $contador++;
   }
-} else {
-  echo "fuuuuu";
-}
+    $longitud = sizeof($array_resultados);
 
-$longitud = sizeof($array_resultados);
 
-$volumenes = [];
-for ($i = 0;$i < $longitud; $i++) {
-  $volumenes[$i] = $array_resultados[$i]['volumen'];
-}
-
-$hidden = false;
-
-echo "<div class='main'>";
-for ($i = 0;$i < $longitud; $i++) {   
-     
-    echo "<form method='POST' action='producto.php' class='form-previsual-grande";
-    if ($hidden) {
-      echo " hidden";
-    } else {
-      $hidden = true;
-    }
-    echo " ml-" . $array_resultados[$i]['volumen'] . "'>";
-    echo "<img src='imagenes/".$array_resultados[$i]['tipo'].".jpg'>";
-
-    echo "<div>";
-    echo "<p><strong>" . $array_resultados[$i]['nombre'] . "</strong></p>";
-    echo "<p>Tipo: " . ucfirst($array_resultados[$i]['tipo']) . "</p>";
-    echo "<hr>";
-    echo "<p class='descripcion'>" . $array_resultados[$i]['descripcion'] . "</p>";
-    foreach ($volumenes as $volumen){
-      echo "<p class='volumen' ";
-      echo "id='ml-" . $volumen . "'>";
-      echo "Volumen: " . $volumen . "ml </p>";
-    }
-    echo "<p'>Precio: " . $array_resultados[$i]['precio']/100 . " €</p>";
-    echo "<p class='stock'>Disponibles: " . $array_resultados[$i]['stock'] . " unidades</p>";
+  echo "<div class='main'>";
+    echo "<div class='form-previsual-grande'>";
+      echo "<img src='imagenes/" . $array_resultados[0]['tipo'] . ".jpg'>";
+      echo "<div class='contenido'>";
+        echo "<div>";
+          echo "<p>nombre: " . $array_resultados[0]['nombre'] . "</p>";
+          echo "<p>tipo: " . $array_resultados[0]['tipo'] . "</p>";
+          echo "<p>descripcion: " . $array_resultados[0]['descripcion'] . "</p>";
+        echo "</div>";
+        echo "<div class='botones'>";
+          for ($n = 0; $n < $longitud; $n++) {
+            echo "<form action='pedidos.php' method='POST' class='form-boton'>";
+              echo "<p>" . $array_resultados[$n]['volumen'] . "ml</p>";
+              echo "<p>" . $array_resultados[$n]['precio'] . "€</p>";
+            echo "</form>";
+          }
+        echo "</div>";
+      echo "</div>";
     echo "</div>";
+  echo "</div>";
 
-    echo "<input type='hidden' name='id_producto' value='".$array_resultados[$i]['id']."'>";
-    echo "</form>";
+
+} catch (Exception ) {
+  echo "<p>Ha fallado la conexion con la base de datos</p>";
+  $real_conexion = false;
 }
-echo "</div>";
 
 ?>
 <?php include("partes/footer.php") ?>
-
-<script>
-
-document.querySelectorAll('.volumen').forEach(function(item) {
-  item.addEventListener('click', function() {
-    this.parentNode.parentNode.classList.add("hidden")
-    const ml = this.id
-    alert (ml)
-    document.querySelectorAll('.form-previsual-grande').forEach(function(form){
-      
-      if (form.classList.contains(ml)) {
-        alert ('eeeooo')
-        form.classList.remove('hidden')
-      }
-    })
-  });
-   });
-
-</script>
