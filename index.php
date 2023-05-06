@@ -2,7 +2,7 @@
 
 <?php
 $host = "192.168.100.11";
-$user = "root";
+$user = "administrador";
 $password = "12345678";
 $data_base = "proyecto";
 echo "uoooooooooooooooooooooo";
