@@ -3,7 +3,13 @@
 <?php
 
 
-$user = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : "invitado";
+if (isset($_SESSION['usuario']) && $_SESSION['usuario_admin'] == '1'){
+  $user = 'administrador';
+} elseif (isset($_SESSION['usuario']) && $_SESSION['usuario_admin'] == '0') {
+  $user = 'registrado';
+} else {
+  $user = 'invitado';
+}
 $password = "12345678";
 $data_base = "proyecto";
 

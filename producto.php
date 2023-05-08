@@ -64,9 +64,16 @@ try {
         echo "</div>";
         echo "<div class='botones'>";
           for ($n = 0; $n < $longitud; $n++) {
+            
             echo "<form action='pedidos.php' method='POST' class='form-boton'>";
               echo "<p>" . $array_resultados[$n]['volumen'] . "ml</p>";
-              echo "<p>" . $array_resultados[$n]['precio'] . "€</p>";
+              echo "<p>" . $array_resultados[$n]['precio']/100 . "€</p>";
+              echo "<select>";
+              for ($i = 1; $i < $array_resultados[$n]['stock']; $i++) {
+                echo "<option value='" . $i . "'>" . $i . "</option>";
+              }
+              echo "</select>";
+              echo "<input type='submit' name='boton_agregar' value='Pedir'>";
             echo "</form>";
           }
         echo "</div>";

@@ -167,12 +167,70 @@ main {
 
 .form-boton {
   width: 100px;
-  height: 50px;
+  height: 100px;
   border: 2px solid black;
   border-radius: 5px;
   margin: 15px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
 }
 
+.form-boton > select {
+  width: 80%;
+  margin: auto;
+}
+
+.form-boton > input {
+  width:80%;
+  margin: auto;
+}
+
+.div-login {
+  display:flex;
+  flex-direction: column;
+  width: 80%;
+  margin:auto;
+  align-items: center;
+}
+
+.login-grande {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin-bottom: 2px;
+}
+
+.div-login> p {
+  margin-bottom:10px;
+}
+
+.login-grande > input {
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgb(179, 236, 179);
+  padding: 2px;
+  margin: 5px 0;
+}
+
+.login-grande > div > input {
+  width: calc(48% - 3px);
+  margin-right: 2%;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgb(179, 236, 179);
+  padding: 2px;
+}
+
+.login-grande > div > button {
+  width: calc(48% - 3px);
+  margin-left: 2%;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgb(179, 236, 179);
+  padding: 2px;
+}
 
 /*  COLORES  */
 
