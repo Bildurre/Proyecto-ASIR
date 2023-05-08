@@ -1,6 +1,12 @@
 <?php include("partes/head.php") ?>
 <?php
-$user = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : "invitado";
+if (isset($_SESSION['usuario']) && $_SESSION['usuario_admin'] == '1'){
+  $user = 'administrador';
+} elseif (isset($_SESSION['usuario']) && $_SESSION['usuario_admin'] == '0') {
+  $user = 'registrado';
+} else {
+  $user = 'invitado';
+}
 $password = "12345678";
 $data_base = "proyecto";
 
@@ -28,7 +34,7 @@ try {
   $seleccion = mysqli_select_db($conexion,"proyecto");
 
   $consulta = "select p.nombre, p.tipo, p.descripcion,
-                      f.precio, f.stock, f.volumen
+                      f.precio, f.stock, f.volumen, f.id_formato
               from productos p join formatos f
               on p.id_producto = f.id_producto
               where p.id_producto = '".$_POST['id_producto']."'
@@ -46,7 +52,8 @@ try {
       "descripcion" => $fila[2],
       "precio" => $fila[3],
       "stock" => $fila[4],
-      "volumen" => $fila[5]
+      "volumen" => $fila[5],
+      "id_formato" => $fila[6]
     ];
     $contador++;
   }
@@ -68,11 +75,15 @@ try {
             echo "<form action='pedidos.php' method='POST' class='form-boton'>";
               echo "<p>" . $array_resultados[$n]['volumen'] . "ml</p>";
               echo "<p>" . $array_resultados[$n]['precio']/100 . "€</p>";
-              echo "<select>";
+              echo "<select name='cantidad'>";
               for ($i = 1; $i < $array_resultados[$n]['stock']; $i++) {
                 echo "<option value='" . $i . "'>" . $i . "</option>";
               }
               echo "</select>";
+              echo "<input type='hidden' name='nombre' value='" . $array_resultados[$n]['nombre'] . "'>";
+              echo "<input type='hidden' name='tipo' value='" . $array_resultados[$n]['tipo'] . "'>";
+              echo "<input type='hidden' name='precio' value='" . $array_resultados[$n]['precio'] . "'>";
+              echo "<input type='hidden' name='id_formato' value='" . $array_resultados[$n]['id_formato'] . "'>";
               echo "<input type='submit' name='boton_agregar' value='Pedir'>";
             echo "</form>";
           }

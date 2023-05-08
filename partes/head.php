@@ -8,7 +8,14 @@
   <link rel="stylesheet" href="/styles/style.css">
 </head>
 <body>
+
+
+
   <?php session_start() ?>
+
+
+
+
   <?php 
   if (isset($_POST["signup"])) {
     header("Location: /registro.php");
@@ -17,6 +24,7 @@
   if (isset($_POST) && $_SERVER["REQUEST_URI"] != "/registro.php") {
     if ((isset($_POST['destroy']))) {
       $_SESSION = [];
+      header("Location: /");
     }
     if (isset($_SESSION['usuario']) && $_SESSION['usuario_admin'] == '1'){
       $user = 'administrador';
@@ -84,6 +92,7 @@
         $_SESSION['usuario_admin'] = $array_resultados['admin'];
       }
     
+
     } catch (Exception ) {
       echo "<p>Ha fallado la conexion con la base de datos</p>";
       $real_conexion = false;
@@ -91,6 +100,7 @@
   }
   
   ?>
+
 
   <header class="bg-so-dark-green">
     <h1>PROYECTO</h1>
@@ -118,7 +128,9 @@
   <ul class="menu bg-dark-green">
     <li><a href="/">HOME</a></li>
     <li><a href="/catalogo.php">CATÁLOGO</a></li>
-    <li><a href="/pedidos.php">MIS PEDIDOS</a></li>
-    <li><a href="/gestion.php">GESTIONAR</a></li>
+    <li><a href="/pedidos.php"
+      <?php echo ($_SESSION['usuario'] == "") ? 'style="display:none"' : "" ?>>MIS PEDIDOS</a></li>
+    <li><a href="/gestion.php"
+      <?php echo ($_SESSION['usuario_admin'] != "1") ? 'style="display:none"' : "" ?>>GESTIONAR</a></li>
   </ul>
   <main class="bg-light-green">

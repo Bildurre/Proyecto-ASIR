@@ -232,6 +232,62 @@ main {
   padding: 2px;
 }
 
+.hidden {
+  display: none;
+}
+
+
+.main-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.linea-pedido,
+.linea-producto {
+  display: flex;
+  border: 1px solid black;
+}
+
+.celda-pedido {
+  padding: 5px;
+  width: 150px;
+  text-align: center;
+}
+
+.celda-producto {
+  padding: 5px;
+  width: 100px;
+  text-align: center;
+}
+
+.mgl {
+  margin-left:50px;
+}
+
+.main-catalogo {
+  display: flex;
+  flex-direction: column;
+}
+
+.tipo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.tipo-todos {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.concreto {
+  margin: 5px;
+}
+
+.titulo-tipo {
+  padding:10px;
+}
 /*  COLORES  */
 
 .bg-so-dark-green {
@@ -246,4 +302,13 @@ main {
 
 .bg-light-green {
   background-color: rgb(209, 245, 209);
+}
+
+.bg-medium-green {
+  background-color: rgb(14, 129, 14);
+  color:rgb(255, 255, 255);
+}
+
+.hidden {
+  display:none;
 }

@@ -22,7 +22,6 @@
   </form>
 <?php } else {
 
-  echo "fuuuuuuuuuuuuuuuuuuuuuuu";
   mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
   $conexion = mysqli_init();
   $conexion -> options(MYSQLI_OPT_CONNECT_TIMEOUT, 1);
@@ -48,7 +47,6 @@
 
   try {
     $seleccion = mysqli_select_db($conexion,"proyecto");
-    var_dump($POST);
     $consulta = "INSERT INTO usuarios VALUES 
                 (NULL, '"
                 . $_POST['nombre'] . "', '"
@@ -88,7 +86,7 @@
       header ("Location: /");
 
     } else {
-      eader ("Location: /registro.php");
+      header ("Location: /registro.php");
     }
     
   } catch (Exception $e) {
