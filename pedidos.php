@@ -25,6 +25,7 @@ if ($_POST['boton_agregar'] && $_SESSION['usuario'] && $_SESSION['usuario_admin'
 
 <?php 
 if ($_POST['hacer']) {
+
   mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     $conexion = mysqli_init();
     $conexion -> options(MYSQLI_OPT_CONNECT_TIMEOUT, 1);
@@ -49,10 +50,10 @@ if ($_POST['hacer']) {
     }
     try {
       $seleccion = mysqli_select_db($conexion,"proyecto");
-      $consulta = "insert into pedidos values
-                  (null," . $_SESSION['id_usuario'] . ", now(), 'en espera';";
-      $resultado = mysqli_query ($conexion, $consulta);
 
+      $consulta = "insert into pedidos values
+                  (null," . (int)$_SESSION['id_usuario'] . ", now(), 'en espera');";
+      $resultado = mysqli_query ($conexion, $consulta);
       $consulta = "select max(id_pedido)
                   from pedidos
                   where id_usuario = " . $_SESSION['id_usuario'] . ";";
@@ -61,22 +62,19 @@ if ($_POST['hacer']) {
       while ($fila = mysqli_fetch_row($resultado)) {   
         $id_pedido = $fila[0];
       }
-
-      $consulta = "insert into listas_pedidos values
-      (" . $id_pedido . "," . $_SESSION['id_formato'] . ", now(), 'en espera';";
-      $resultado = mysqli_query ($conexion, $consulta);
-
-
+      
       $n = sizeof($_SESSION['npedido']);
-      for ($i=0; $i <= $n; $i++) { 
+      
+      for ($i = 0; $i < $n; $i++) {
         $consulta = "insert into listas_pedidos values (
-        " . $id_pedido . ",
-        " . $_SESSION['npedido'][$n]['id_formato'] . ",
-        " . $_SESSION['npedido'][$n]['cantidad'] . ";";
+        " . (int)$id_pedido . ",
+        " . (int)$_SESSION['npedido'][$i]['id_formato'] . ",
+        " . (int)$_SESSION['npedido'][$i]['cantidad'] . ");";
         $resultado = mysqli_query ($conexion, $consulta);
-          
+        
         }
         $_SESSION['npedido'] = [];
+        $_pedido = true;
     } catch (Exception $e){
     }
 
@@ -233,7 +231,7 @@ try {
   }
   
   echo "<div class='main-col'>";
-  if (isset($_SESSION['npedido'])) {
+  if (isset($_SESSION['npedido']) && !($_pedido)) {
     $n = sizeof($_SESSION['npedido']);
     echo "<h2>HACER PEDIDO</h2>";
     echo "<div class='linea-producto mgl'>";
